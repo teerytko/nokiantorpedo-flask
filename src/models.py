@@ -13,12 +13,32 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    fullname = Column(String)
+    email = Column(String)
     password = Column(String)
 
-    def __init__(self, name=None, email=None):
-        self.name = name
-        self.email = email
+    def __init__(self, **kwargs):
+        self.name = kwargs.get('name')
+        self.email = kwargs.get('email')
+        self.password = kwargs.get('password')
 
     def __repr__(self):
         return '<User %r>' % (self.name)
+
+    def to_dict(self):
+        return {'id': self.id,
+                'name': self.name,
+                'email': self.email,
+                'password': self.password,
+                }
+
+    def is_active(self):
+        return True 
+
+    def get_id(self):
+        return self.id
+
+    def is_authenticated(self):
+        return True
+
+    def is_anonymous(self):
+        return False
