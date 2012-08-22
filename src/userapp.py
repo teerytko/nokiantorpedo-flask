@@ -43,11 +43,15 @@ def register_urls(app):
         form = LoginForm(request.form)
         if request.method == 'POST' and form.validate():
             # login and validate the user...
-            user = find_users(name=form.username.data)[0]
-            if user.password == form.password.data:
-                login_user(user)
-                flash("Logged in successfully.")
-                return redirect(request.args.get("next") or url_for("index"))
+            try:
+                user = find_users(name=form.username.data)[0]
+                if user.password == form.password.data:
+                    login_user(user)
+                    flash("Logged in successfully.")
+                    return redirect(request.args.get("next") or url_for("index"))
+            except IndexError:
+                # user not found
+                pass
         return render_template("login.html", form=form)
 
     @app.route('/register', methods=['GET', 'POST'])
@@ -66,7 +70,7 @@ def register_urls(app):
     @app.route("/")
     def index():
         app.logger.info("test index")
-        return "I am index!"
+        return render_template('main.html')
     
     @app.route("/hello/")
     @app.route("/hello/<username>")

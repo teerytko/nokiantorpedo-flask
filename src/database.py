@@ -26,6 +26,6 @@ def create_db_session(app):
 def init_db(app):
     import models
     Base.metadata.create_all(bind=app.config['DB_ENGINE'])
-    
+
 def clear_db(app):
     Base.metadata.drop_all(bind=app.config['DB_ENGINE'])
